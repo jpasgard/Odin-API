@@ -12,8 +12,8 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/pessoas")
-public class PessoaController {
+@RequestMapping(value = "/clientes")
+public class ClienteController {
 
     @Autowired
     private PessoaService pService;
@@ -28,19 +28,14 @@ public class PessoaController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<PessoaModel> insert(@Valid @RequestBody PessoaModel p){
-        pService.save(p);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(p.getId())
+        PessoaModel pessoa = pService.save(p);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pessoa.getId())
                 .toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(pessoa);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<PessoaModel> findById(@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok().body(pService.findById(id));
-    }
-
-    @RequestMapping(value = "/status/inativos", method = RequestMethod.GET)
-    public ResponseEntity<List<PessoaModel>> findInativo(){
-        return ResponseEntity.ok().body(pService.findInativo());
     }
 }
