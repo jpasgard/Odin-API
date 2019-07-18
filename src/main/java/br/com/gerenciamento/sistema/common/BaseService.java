@@ -1,7 +1,6 @@
 package br.com.gerenciamento.sistema.common;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @Author Rafael Castro

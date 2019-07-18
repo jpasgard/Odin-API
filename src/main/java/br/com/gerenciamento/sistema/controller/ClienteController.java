@@ -16,26 +16,33 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    private PessoaService pService;
+    private PessoaService service;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<PessoaModel>>findAll(){
-        return ResponseEntity.ok().body(pService.findAll());
+        return ResponseEntity.ok().body(service.findAll());
     }
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
-    public ResponseEntity <Void> delete(@PathVariable("id")Long id){ pService.delete(id); return ResponseEntity.noContent().build();}
+    @GetMapping(value = "/{id}")
+    public ResponseEntity <Void> delete(@PathVariable("id")Long id){
+	service.delete(id);
+	return ResponseEntity.noContent().build();
+    }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<PessoaModel> insert(@Valid @RequestBody PessoaModel p){
-        PessoaModel pessoa = pService.save(p);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pessoa.getId())
-                .toUri();
+        PessoaModel pessoa = service.save(p);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pessoa.getId()).toUri();
         return ResponseEntity.created(uri).body(pessoa);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<PessoaModel> findById(@PathVariable("id") Long id) throws Exception {
-        return ResponseEntity.ok().body(pService.findById(id));
+        return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @GetMapping(value = "/status/inativos")
+    public ResponseEntity<List<PessoaModel>> findInativo(){
+        return ResponseEntity.ok().body(service.findInativo());
     }
 }

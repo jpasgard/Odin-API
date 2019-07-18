@@ -27,9 +27,6 @@ public class OdinApplication implements CommandLineRunner {
 	private ItemVendaRepository vendaItem;
 
 	@Autowired
-	private PedidoRepository pedido;
-
-	@Autowired
 	private VendaRepository venda;
 
 	@Autowired
