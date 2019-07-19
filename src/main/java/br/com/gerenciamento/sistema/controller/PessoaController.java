@@ -23,7 +23,7 @@ public class PessoaController {
         return ResponseEntity.ok().body(pService.findAll());
     }
 
-    @GetMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity <Void> delete(@PathVariable("id")Long id){ pService.delete(id); return ResponseEntity.noContent().build();}
 
     @PostMapping
