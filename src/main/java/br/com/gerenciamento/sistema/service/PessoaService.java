@@ -1,22 +1,35 @@
 package br.com.gerenciamento.sistema.service;
 
 import br.com.gerenciamento.sistema.common.BaseService;
+import br.com.gerenciamento.sistema.model.EnderecoModel;
 import br.com.gerenciamento.sistema.model.PessoaModel;
-import br.com.gerenciamento.sistema.model.StatusCliente;
-import br.com.gerenciamento.sistema.repository.PessoaRepository;
+import br.com.gerenciamento.sistema.model.enuns.StatusPessoa;
+import br.com.gerenciamento.sistema.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PessoaService implements BaseService<PessoaModel>{
     @Autowired
-    private PessoaRepository rRepo;
+    private ClienteRepository rRepo;
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     @Override
     public PessoaModel save(PessoaModel pessoaModel) {
+        pessoaModel.setStatus(StatusPessoa.ATIVO);
+        List<EnderecoModel> enderecos = new ArrayList<>();
+
+        if(pessoaModel.getEndereco() != null){
+            pessoaModel.getEndereco().forEach(e ->{
+                enderecos.add(enderecoService.save(e));
+            });
+            pessoaModel.setEndereco(enderecos);
+        }
         return rRepo.save(pessoaModel);
     }
 
@@ -35,9 +48,4 @@ public class PessoaService implements BaseService<PessoaModel>{
         rRepo.delete(id);
     }
 
-    public List<PessoaModel> findInativo(){
-        return rRepo.findAll().stream().filter(x -> {
-          return x.getStatus() == StatusCliente.INATIVO;
-        }).collect(Collectors.toList());
-    }
 }

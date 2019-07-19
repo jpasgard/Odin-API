@@ -1,13 +1,17 @@
-package br.com.gerenciamento.sistema.model;
+package br.com.gerenciamento.sistema.model.enuns;
 
-public enum StatusCliente {
+/**
+ * @Author Rafael Castro
+ * Enum com os status das pessoas cadastradas no ODIN
+ */
+public enum StatusPessoa {
     INATIVO(0, "Invativo"),
     ATIVO(1, "Ativo");
 
     private Integer codigo;
     private String descricao;
 
-    private StatusCliente(Integer codigo, String descricao) {
+    private StatusPessoa(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -20,8 +24,8 @@ public enum StatusCliente {
         return descricao;
     }
 
-    public static StatusCliente toEnum(Integer codigo)  {
-        for (StatusCliente x : StatusCliente.values()) {
+    public static StatusPessoa toEnum(Integer codigo)  {
+        for (StatusPessoa x : StatusPessoa.values()) {
             if (codigo.equals(x.getCodigo()))
                 return x;
         }
