@@ -22,15 +22,24 @@ public class CidadeController {
 
     @GetMapping
     public ResponseEntity<List<CidadeDTO>>findAll(){
-        return ResponseEntity.ok().body(toDto(service.findAll()));
+        return ResponseEntity.ok().body(toDtos(service.findAll()));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CidadeDTO>find(@PathVariable Long id){
+        return ResponseEntity.ok().body(toDto(service.findById(id)));
     }
 
     @GetMapping(value = "/estado/{id}")
-    public ResponseEntity<List<CidadeDTO>>findByEstado(@PathVariable("id")Long idEstado){
-        return ResponseEntity.ok().body(toDto(service.findByEstado(idEstado)));
+    public ResponseEntity<List<CidadeDTO>>findByEstado(@PathVariable(value="id") Long id){
+        return ResponseEntity.ok().body(toDtos(service.findByEstado(id)));
     }
 
-    private List<CidadeDTO> toDto(List<CidadeModel> models){
-        return service.toDto(models);
+    private CidadeDTO toDto(CidadeModel model){
+        return service.toDto(model);
+    }
+
+    private List<CidadeDTO> toDtos(List<CidadeModel> models){
+        return service.toDtos(models);
     }
 }
