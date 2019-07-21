@@ -11,23 +11,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gerenciamento.sistema.model.CidadeModel;
 import br.com.gerenciamento.sistema.service.CidadeService;
+import br.com.gerenciamento.sistema.dto.CidadeDTO;
 
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
 
     @Autowired
-    private CidadeService cidadeService;
+    private CidadeService service;
 
     @GetMapping
-    public ResponseEntity<List<CidadeModel>>findAll(){
-        return ResponseEntity.ok().body(cidadeService.findAll());
+    public ResponseEntity<List<CidadeDTO>>findAll(){
+        return ResponseEntity.ok().body(toDtos(service.findAll()));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CidadeDTO>find(@PathVariable Long id){
+        return ResponseEntity.ok().body(toDto(service.findById(id)));
     }
 
     @GetMapping(value = "/estado/{id}")
-    public ResponseEntity<List<CidadeModel>>findByEstado(@PathVariable("id")Long idEstado){
-        return ResponseEntity.ok().body(cidadeService.findByEstado(idEstado));
+    public ResponseEntity<List<CidadeDTO>>findByEstado(@PathVariable(value="id") Long id){
+        return ResponseEntity.ok().body(toDtos(service.findByEstado(id)));
     }
 
+    private CidadeDTO toDto(CidadeModel model){
+        return service.toDto(model);
+    }
 
+    private List<CidadeDTO> toDtos(List<CidadeModel> models){
+        return service.toDtos(models);
+    }
 }

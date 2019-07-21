@@ -3,8 +3,12 @@ package br.com.gerenciamento.sistema.service;
 import br.com.gerenciamento.sistema.common.BaseService;
 import br.com.gerenciamento.sistema.model.CidadeModel;
 import br.com.gerenciamento.sistema.repository.CidadeRepository;
+import br.com.gerenciamento.sistema.dto.CidadeDTO;
+import br.com.gerenciamento.sistema.service.exceptions.ObjectNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -12,21 +16,21 @@ import java.util.List;
 public class CidadeService implements BaseService<CidadeModel> {
 
     @Autowired
-    private CidadeRepository cidadeRepository;
+    private CidadeRepository repository;
 
     @Override
     public CidadeModel save(CidadeModel cidadeModel) {
-        return cidadeRepository.save(cidadeModel);
+        return repository.save(cidadeModel);
     }
 
     @Override
     public List<CidadeModel> findAll() {
-        return cidadeRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
-    public CidadeModel findById(Long id) throws Exception {
-        return cidadeRepository.findById(id).orElseThrow(()->new Exception("Cidade de id "+ id+ " não encontrada"));
+    public CidadeModel findById(Long id) throws ObjectNotFoundException {
+        return repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + CidadeModel.class.getName()));
     }
 
     @Override
@@ -35,6 +39,20 @@ public class CidadeService implements BaseService<CidadeModel> {
     }
 
     public List<CidadeModel> findByEstado(Long id){
-        return cidadeRepository.findByEstado(id);
+        return repository.findByEstado(id);
+    }
+
+    public CidadeDTO toDto(CidadeModel model){
+        return new CidadeDTO().toDto(model);
+    }
+
+    public List<CidadeDTO> toDtos(List<CidadeModel> models){
+        CidadeDTO dto = new CidadeDTO();
+        List<CidadeDTO> dtos = new ArrayList<>();
+
+        models.forEach(model->{
+            dtos.add(dto.toDto(model));
+        });
+        return dtos;
     }
 }
